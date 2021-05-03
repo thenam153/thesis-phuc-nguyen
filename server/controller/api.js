@@ -39,7 +39,7 @@ function getListApi(req, res, next) {
     let idProject = req.body.idProject || req.body.ProjectId
     Api.findAll({
         where: {
-            idProject
+            ProjectId: idProject
         }
     })
     .then(apis => {

@@ -3,7 +3,7 @@ const { Api, Project } = require("../models")
 
 function createProject(req, res, next) {
     let {name, description} = req.body
-
+    console.log(name, description)
     Project.findOrCreate({
         where: {
             name

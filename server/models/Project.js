@@ -19,7 +19,9 @@ module.exports = function(sequelize) {
     }, {
         sequelize,
         modelName,
-        freezeTableName: false
+        freezeTableName: false,
+        charset: 'utf8',
+        collate: 'utf8_unicode_ci'
     })
 }
 module.exports.Name = modelName
