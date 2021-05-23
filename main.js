@@ -5,7 +5,7 @@ const bodyParser 	= require("body-parser")
 const app			= express()
 const PORT			= process.env.PORT || 3002
 const { getResponse } = require("./server/utils")
-const { apiRoute, projectRoute, testRoute } = require("./server/router")
+const { apiRoute, projectRoute, testRoute, generateRoute } = require("./server/router")
 
 app.use(cors())
 app.use(bodyParser.json())
@@ -18,6 +18,7 @@ app.use(function(req, res, next) {
 app.use("/api/project", projectRoute)
 app.use("/api/api", apiRoute)
 app.use("/api/test", testRoute)
+app.use("/api/gen", generateRoute)
 
 app.use(function(error, req, res, next) {
 	console.log(error)

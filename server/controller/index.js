@@ -1,5 +1,6 @@
 module.exports = {
     apiController: require("./api"),
     projectController: require("./project"),
-    testController: require("./test")
+    testController: require("./test"),
+    generateController: require("./generate")
 }
