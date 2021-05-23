@@ -21,10 +21,7 @@ function getFullInfoProject(req, res, next) {
     })
     .then(project => {
         parseJson(project)
-        makeFolder(project)
-        .then(out => {
-            res.sendFile(out)
-        })
+        res.send(getResponse(200, "", project))
     })
     .catch(next)
 
@@ -82,9 +79,6 @@ function genTests(req, res, next) {
         parseJson(project)
         let test = genTestCases(project)
         res.send(getResponse(200, "", test))
-        // .then(out => {
-        //     res.sendFile(out)
-        // })
     })
     .catch(next)
 }
@@ -96,7 +90,7 @@ function genTestCases(projectObj) {
             name: projectObj.name,
             schema: "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
         },
-        items: []
+        item: []
     }
     for(let api of projectObj.Apis) {
         if(!api.Tests || !api.Tests.length) {
