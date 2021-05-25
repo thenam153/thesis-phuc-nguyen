@@ -1,27 +1,21 @@
 <template>
   <div>
-      main
-      <div>
-        info project
-        <div style="margin: 30px;">
-          info api <span>Edit</span><span>Delete</span><div>Add test case</div>
-          <div>
-            info test case <span>Edit</span><span>Delete</span>
-          </div>
-        </div>
-        <div style="margin: 30px;">
-          info api <span>Edit</span><span>Delete</span><div>Add test case</div>
-          <div>
-            info test case <span>Edit</span><span>Delete</span>
-          </div>
-        </div>
-        <div style="margin: 30px;">
-          info api <span>Edit</span><span>Delete</span><div>Add test case</div>
-          <div>
-            info test case <span>Edit</span><span>Delete</span>
+    <div v-if="currentProject && currentProject.Apis">
+      <div v-for="api in currentProject.Apis" :key="api.id" style="margin: 30px;">
+        <b>{{ api.name}}</b> <span @click="onUpdateApi(api, api.id)">Edit</span><span @click="onDeleteApi(api, api.id)">Delete</span><span>Add test case</span>
+        <div v-if="api.Tests">
+          <div v-for="test in api.Tests" :key="test.id">
+            {{ test.name }} <span>Edit</span><span>Delete</span>
+            <div v-for="(testCase, __index) in test.data" :key="__index" >
+                {{ testCase.name }}
+            </div>
           </div>
         </div>
       </div>
+    </div>
+    <div @click="onCreateApi">
+      Add API
+    </div>
   </div>
 </template>
 
@@ -29,7 +23,20 @@
 
 export default {
     name: "Main",
-
+    props: {
+      currentProject: {
+        type: Object
+      },
+      onCreateApi: {
+        type: Function
+      },
+      onUpdateApi: {
+        type: Function
+      },
+      onDeleteApi: {
+        type: Function
+      },
+    },
 }
 </script>
 
