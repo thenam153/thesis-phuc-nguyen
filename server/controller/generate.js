@@ -56,8 +56,6 @@ function genDocs(req, res, next) {
         makeFolder(project)
         .then(out => {
             res.sendFile(out)
-            let pathIsRemoved = path.join(out, "..")
-            exec(`rm -rf ${pathIsRemoved}`)
         })
     })
     .catch(next)
@@ -253,11 +251,14 @@ function makeApiMD(api) {
 function makeReadmeMD() {
     return "This is my document"
 }
-function makeFolder(projectObj) {
+async function makeFolder(projectObj) {
     let projectName = projectObj.name
     let projectId = projectObj.id
     let projectIdPath = path.join(docsPath, projectId.toString())
     let projectNamePath = path.join(projectIdPath, projectName)
+    await new Promise(res => {
+        exec(`rm -rf ${projectIdPath}`, res)
+    })
     if(!fs.existsSync(projectIdPath)) {
         fs.mkdirSync(projectIdPath)
     }
