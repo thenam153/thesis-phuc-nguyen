@@ -52,7 +52,7 @@ function getListApi(req, res, next) {
 }
 
 function deleteApi(req, res, next) {
-    let { id } = req.body.id
+    let { id } = req.body
     Api.destroy({
         where: {
             id
