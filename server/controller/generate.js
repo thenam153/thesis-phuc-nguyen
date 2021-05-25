@@ -56,6 +56,8 @@ function genDocs(req, res, next) {
         makeFolder(project)
         .then(out => {
             res.sendFile(out)
+            let pathIsRemoved = path.join(out, "..")
+            exec(`rm -rf ${pathIsRemoved}`)
         })
     })
     .catch(next)
@@ -106,12 +108,12 @@ function genTestCases(projectObj) {
                     response: []
                 }
                 let _item = {
-                listen: 'test',
-                script: {
-                        exec: [`pm.test(\"${_cs.name}\", function(){\r`],
-                        type: "text/javascript"
+                    listen: 'test',
+                    script: {
+                            exec: [`pm.test(\"${_cs.name}\", function(){\r`],
+                            type: "text/javascript"
+                        }
                     }
-                }
                 for(let e of _cs.expect) {
                     if(e.code) {
                         _item.script.exec.push(`    pm.response.to.have.status(${e.code});\r`)
@@ -122,7 +124,7 @@ function genTestCases(projectObj) {
                 item.request = processRequest(api.data, _cs)
                 _item.script.exec.push("});\r")
                 item.event = [_item]
-                col.items.push(item)
+                col.item.push(item)
             }
         }
     }
@@ -134,7 +136,7 @@ function processRequest(api, cs) {
         method: api.method,
         header: []
     }
-    if(result.method.toUpperCase() == "POST") {
+    if((result.method || "").toUpperCase() == "POST") {
         result.body = {
             mode: api.mode,
         }

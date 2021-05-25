@@ -12,6 +12,12 @@
       <div @click="onDeleteProject">
           Delete project
       </div>
+      <div @click="generateDocs">
+          Gen docs
+      </div>
+      <div @click="generateTestCases">
+          Gen test
+      </div>
       <div>
           <b>{{ currentProject ? currentProject.name : "Empty"}}</b>
       </div>
@@ -36,6 +42,12 @@ export default {
             type: Function
         },
         onDeleteProject: {
+            type: Function
+        },
+        generateDocs: {
+            type: Function
+        },
+        generateTestCases: {
             type: Function
         },
     },

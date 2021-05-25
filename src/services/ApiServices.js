@@ -19,6 +19,17 @@ class ApiService {
             })
         })
     }
+    downloadFile(uri, payload = {}, headers = {"Access-Control-Allow-Origin": "*"}) {
+        return new Promise((resolve, reject) => {
+            axios.post(this.baseUrl + uri, payload, { headers, responseType: 'arraybuffer' })
+            .then(res => {
+                resolve(res)
+            })
+            .catch(err => {
+                reject(err)
+            })
+        })
+    }
     getAllProject() {
         return this.httpPost("/api/project/full-info")
     }
@@ -39,6 +50,15 @@ class ApiService {
     }
     deleteApi(data) {
         return this.httpPost("/api/api/delete", data)
+    }
+    createTestCase(data) {
+        return this.httpPost("/api/test/create", data)
+    }
+    updateTestCase(data) {
+        return this.httpPost("/api/test/update", data)
+    }
+    deleteTestCase(data) {
+        return this.httpPost("/api/test/delete", data)
     }
     static getInstance(baseUrl) {
         if(!this.instance) {
