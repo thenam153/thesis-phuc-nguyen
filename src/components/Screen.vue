@@ -1,7 +1,7 @@
 <template>
   <div>
-      <top-nav :current-project="currentProject" :on-new-project="onNewProject" :on-open-project="onOpenProject" :on-update-project="onUpdateProject" :on-delete-project="onDeleteProject" />
-      <main-layout :current-project="currentProject" :on-create-api="onCreateApi" :on-update-api="onUpdateApi" :on-delete-api="onDeleteApi"/>
+      <top-nav :current-project="currentProject" :on-new-project="onNewProject" :on-open-project="onOpenProject" :on-update-project="onUpdateProject" :on-delete-project="onDeleteProject" :generate-docs="generateDocs" :generate-test-cases="generateTestCases"/>
+      <main-layout :current-project="currentProject" :on-create-api="onCreateApi" :on-update-api="onUpdateApi" :on-delete-api="onDeleteApi" :onCreateTestCase="onCreateTestCase" :onUpdateTestCase="onUpdateTestCase" :onDeleteTestCase="onDeleteTestCase" />
   </div>
 </template>
 
@@ -144,8 +144,9 @@ export default {
       })
       .then(({ data }) => {
         console.log(data)
-        data.data = JSON.stringify(data.data)
-        return ApiServices.updateApi(data)
+        let _data = Object.assign({}, data)
+        _data.data = JSON.stringify(data.data)
+        return ApiServices.updateApi(_data)
       })
       .then(res => {
         console.log(res)
@@ -175,13 +176,115 @@ export default {
         console.log(result)
       })
     },
-    onCreateTestCase() {
+    onCreateTestCase(api) {
+      this.dialog.alert("", {
+        view: "TestCase",
+        data: {
+          
+        }
+      })
+      .then(({data}) => {
+        console.log(data)
+        data.idApi = api.id
+        data.data = JSON.stringify(data.data)
+        ApiServices.createTestCase(data)
+        .then(res => {
+          console.log(res)
+          res.content.data = JSON.parse(res.content.data)
+          api.Tests.push(res.content)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      })
+      .catch(err => {
+        console.log(err)
+      })
     },
-    onUpdateTestCase() {
-    },
+    onUpdateTestCase(testCase) {
+      console.log(testCase)
+      this.dialog.alert("", {
+        view: "TestCase",
+        data: {
+          testCase: testCase
+        }
+      })
+      .then(({data}) => {
+        let _data = Object.assign({}, data)
+        _data.data = JSON.stringify(data.data)
+        ApiServices.updateTestCase(_data)
+        .then(res => {
+          console.log(res)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      })
+      .catch(err => {
+        console.log(err)
+      })
 
+    },
+    onDeleteTestCase(api, testCase) {
+      console.log(testCase)
+      ApiServices.deleteTestCase({id: testCase.id})
+      .then(res => {
+        api.Tests.splice(api.Tests.indexOf(testCase))
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    },
+    generateDocs() {
+      ApiServices.downloadFile("/api/gen/gen-doc", {
+        id: this.currentProject.id
+      })
+      .then(res => {
+        let a = document.createElement("a")
+        document.body.appendChild(a)
+        a.style = "display: none"
+        let blob = new Blob([res.data],{type: "application/zip"})
+        let url = window.URL.createObjectURL(blob);
+        a.href = url;
+        a.download = `${this.currentProject.name || "docs"}.zip`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    },
+    generateTestCases() {
+      ApiServices.httpPost("/api/gen/gen-test", {
+        id: this.currentProject.id
+      })
+      .then(res => {
+        console.log(res)
+        let data = JSON.stringify(res.content, null, 4)
+        let a = document.createElement("a")
+        document.body.appendChild(a)
+        a.style = "display: none"
+        let blob = new Blob([data],{type: "text/plain"})
+        let url = window.URL.createObjectURL(blob);
+        a.href = url;
+        a.download = `${this.currentProject.name || "test-case"}.json`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    },
   }
 }
+function str2bytes (str) {
+   var bytes = new Uint8Array(str.length);
+   for (var i=0; i<str.length; i++) {
+      bytes[i] = str.charCodeAt(i);
+    }
+    return bytes;
+}
+
 </script>
 
 <style scoped>

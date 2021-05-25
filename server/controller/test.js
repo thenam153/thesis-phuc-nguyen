@@ -52,7 +52,7 @@ function getListTest(req, res, next) {
 }
 
 function deleteTest(req, res, next) {
-    let { id } = req.body.id
+    let { id } = req.body
     Test.destroy({
         where: {
             id
