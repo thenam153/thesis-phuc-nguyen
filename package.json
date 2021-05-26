@@ -22,7 +22,8 @@
     "mysql2": "^2.2.5",
     "sequelize": "^6.6.2",
     "vue": "^2.6.12",
-    "vuejs-dialog": "^1.4.2"
+    "vuejs-dialog": "^1.4.2",
+    "wi-css": "git+https://github.com/revotechUET/wi-css.git"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.5.13",
@@ -31,6 +32,8 @@
     "babel-eslint": "^10.1.0",
     "eslint": "^6.8.0",
     "eslint-plugin-vue": "^6.2.2",
+    "less-loader": "^6.1.0",
+    "sass-loader": "^10.0.3",
     "vue-template-compiler": "^2.6.12"
   },
   "eslintConfig": {
