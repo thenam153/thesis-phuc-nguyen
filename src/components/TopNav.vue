@@ -29,6 +29,9 @@
             <div class="item-name" @click="generateTestCases">
                 Gen test
             </div>
+            <div class="item-name" v-if="currentProject && currentProject.id">
+                <a :href="'docs/' + currentProject.id + '/_book'" target="_blank">Docs</a>
+            </div>
         <!-- </div> -->
         <!-- <div class="item"> -->
             <div class="item-name" >

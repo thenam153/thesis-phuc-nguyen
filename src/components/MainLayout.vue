@@ -1,8 +1,18 @@
 <template>
   <div class="main">
     <div v-if="currentProject && currentProject.Apis" style="overflow: scroll">
-      <div class="submit" @click="onCreateApi">
-        Add API
+      <div class="" style="display: flex">
+        <div class="" style="flex: 1">
+          <div style="font-size: 30px">
+            {{ currentProject.name }}
+          </div>
+          <div>
+            {{ currentProject.description }}
+          </div>
+        </div>
+        <div class="submit" @click="onCreateApi">
+          Add API
+        </div>
       </div>
       <div class="item-api" v-for="api in currentProject.Apis" :key="api.id" style="margin: 30px;" >
         <div class="api-name">
@@ -15,8 +25,11 @@
           <div class="submit" @click="onUpdateApi(api, api.id)">Edit</div>
           <div class="submit" @click="onDeleteApi(api, api.id)">Delete</div>
           <div class="submit" @click="onCreateTestCase(api)">Add test case</div>
+          <div class="submit" @click="toggle('api', api.id)">
+            {{ toggleApiObj[api.id] ? "Show" : "Hide" }}
+          </div>
         </div>
-        <div >            
+        <div v-show="!toggleApiObj[api.id]">            
           <div class="api-info">
             <div class="item-api-info">
               <label>FilePath: </label>
@@ -42,130 +55,185 @@
                 <input type="text" disabled v-model="api.data.path">
               </div>
             </div>
-            <div class="title">
-              List Parameters
-            </div>
-            <div class="api-info-parameters">
-              <div style="margin: 10px 0; border-bottom: 1px solid #aaa;" v-for="(p, _index) in api.data.parameters" :key="_index">
-                  <div class="item-param">
-                    <label>Name:</label>
-                    <div class="">
-                      <input type="text" disabled v-model="p.name">
-                    </div>
-                  </div>
-                  <div class="item-param">
-                    <label>Description:</label>
-                    <div class="">
-                      <input type="text" disabled v-model="p.description">
-                    </div>
-                  </div>
-                  <div class="item-param">
-                    <label>In:</label>
-                    <div class="">
-                      <input type="text" disabled v-model="p.in">
-                    </div>
-                  </div>
-                  <div class="item-param">
-                    <label>Type:</label>
-                    <div class="">
-                      <input type="text" disabled v-model="p.type">
-                    </div>
-                  </div>
-                  <div class="item-param">
-                    <label>Required:</label>
-                    <div class="">
-                      <input type="text" disabled v-model="p.required">
-                    </div>
-                  </div>
-              </div>
-            </div>
-            <div class="title">
-              List Responses
-            </div>
-            <div class="api-info-responses">
-              <div style="margin: 10px 0; border-bottom: 1px solid #aaa;" v-for="(r, _index) in api.data.responses" :key="_index">
-                <div class="item-res">
-                  <label>Code: </label>
-                  <div class="">
-                    <input type="text" disabled v-model="r.code">
-                  </div>
+            <div style="display: flex;">
+                <div style="flex: 1;font-size: 16px;font-weight: bold;margin: 16px 0;">
+                    Parameters
                 </div>
-                <div class="item-res">
-                  <label>Message: </label>
-                  <div class="">
-                    <input type="text" disabled v-model="r.message">
-                  </div>
+                <div class="submit" style="width: 200px!important" @click="toggle('param', api.id)">
+                  {{ !togglePObj[api.id] ? "Show" : "Hide" }}
                 </div>
-                <div class="item-res">
-                  <label>Description: </label>
-                  <div class="">
-                    <input type="text" disabled v-model="r.description">
-                  </div>
+            </div>
+            <div class="api-info-parameters" v-show="togglePObj[api.id]">
+              <div class="block">
+                    <div>
+                        <div class="table-headers">
+                            <div class="table-col">
+                                Name
+                            </div>
+                            <div class="table-col">
+                                Description
+                            </div>
+                            <div class="table-col">
+                                In
+                            </div>
+                            <div class="table-col">
+                                Type
+                            </div>
+                            <div class="table-col">
+                                Required
+                            </div>
+                        </div>
+                        <div class="table-content">
+                            <div class="table-row" v-for="(p, _index) in api.data.parameters" :key="_index">
+                                <div class="table-col">
+                                    <input disabled type="text" v-model="p.name">
+                                </div>
+                                <div class="table-col">
+                                    <input disabled type="text" v-model="p.description">
+                                </div>
+                                <div class="table-col">
+                                    <select disabled name="" v-model="p.in">
+                                        <option value="body">body</option>
+                                        <option value="path">path</option>
+                                        <option value="query">query</option>
+                                    </select>
+                                </div>
+                                <div class="table-col">
+                                    <input disabled type="text" v-model="p.type">
+                                </div>
+                                <div class="table-col">
+                                    <input disabled style="margin: auto!important" type="checkbox" v-model="p.required">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
+            </div>
+            <div style="display: flex;">
+                <div style="flex: 1;font-size: 16px;font-weight: bold;margin: 16px 0;">
+                    Responses
+                </div>
+                <div class="submit" style="width: 200px!important" @click="toggle('res', api.id)">
+                  {{ !toggleRObj[api.id] ? "Show" : "Hide" }}
+                </div>
+            </div>
+            <div class="api-info-responses" v-show="toggleRObj[api.id]">
+              <div class="block">
+                    <div>
+                        <div class="table-headers">
+                            <div class="table-col">
+                                Code
+                            </div>
+                            <div class="table-col">
+                                Message
+                            </div>
+                            <div class="table-col">
+                                Description
+                            </div>
+                        </div>
+                        <div class="table-content">
+                            <div class="table-row" v-for="(r, _index) in api.data.responses" :key="_index">
+                                <div class="table-col">
+                                    <input disabled type="text" v-model="r.code">
+                                </div>
+                                <div class="table-col">
+                                    <input disabled type="text" v-model="r.message">
+                                </div>
+                                <div class="table-col">
+                                    <input disabled type="text" v-model="r.description">
+                                </div>
+                            </div>   
+                        </div>
+                    </div>
+                </div>
             </div>
           </div>
           <div v-if="api.Tests">
-            <div class="title">
-              Test Case
+            <div style="display: flex;">
+                <div style="flex: 1;font-size: 16px;font-weight: bold;margin: 16px 0;">
+                    Test Case
+                </div>
+                <div class="submit" style="width: 200px!important" @click="toggle('test_case', api.id)">
+                  {{ !toggleTObj[api.id] ? "Show" : "Hide" }}
+                </div>
             </div>
-            <div style="position: relative;" v-for="test in api.Tests" :key="test.id">
-              <div class="title-name">
-                Name: {{ test.name }} 
-              </div>
-              <div class="action-test">
-                <div class="submit" @click="onUpdateTestCase(test)">Edit</div>
-                <div class="submit" @click="onDeleteTestCase(api, test)">Delete</div>
-              </div>
-              <div class="item-test" v-for="(testCase, __index) in test.data" :key="__index" >
-                  <div class="">
-                    Case: {{ testCase.name }}
-                  </div>
-                  <div>
-                    <div style="font-size: 15px; font-weight: 500" class="">
-                      Parameters
-                    </div>
-                    <div style="margin-left: 24px; border-bottom: 1px solid #aaa" class="" v-for="(_p, __index) in testCase.parameters" :key="__index">
-                        <div class="item-api-info">
-                          <label>Name:</label>
-                          <div class="">
-                            <input type="text" disabled v-model="_p.name">
-                          </div>
+            <div class="" v-show="toggleTObj[api.id]" v-for="testCase in api.Tests" :key="testCase.id">
+              <div v-for="(t, index) in testCase.data" :key="index">
+                    <div class="block" style="display: flex;">
+                        <div class="dialog-item" style="flex: 1">
+                            <label>Name Case</label>
+                            <div>
+                                <input type="text" v-model="t.name">
+                            </div>
                         </div>
-                        <div class="item-api-info">
-                          <label>Value:</label>
-                          <div class="">
-                            <input type="text" disabled v-model="_p.value">
-                          </div>
+                        <div class="submit" @click="onUpdateTestCase(testCase)">
+                          Edit
+                        </div>
+                        <div class="submit" @click="onDeleteTestCase(api, testCase)">
+                          Delete
                         </div>
                     </div>
-                  </div>
-                  <div>
-                    <div style="font-size: 15px; font-weight: 500">
-                      Expect
+                    <div class="block" >
+                        <div style="display: flex;">
+                            <div style="flex: 1;font-size: 16px;font-weight: bold;margin: 16px 0;">
+                                Parameters
+                            </div>
+                        </div>
+                        <div>
+                            <div class="table-headers">
+                                <div class="table-col">
+                                    Name
+                                </div>
+                                <div class="table-col">
+                                    Value
+                                </div>
+                            </div>
+                            <div class="table-content">
+                                <div class="table-row" v-for="(p, _index) in t.parameters" :key="_index">
+                                    <div class="table-col">
+                                        <input disabled type="text" v-model="p.name">
+                                    </div>
+                                    <div class="table-col">
+                                        <input disabled type="text" v-model="p.description">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div style="margin-left: 24px; border-bottom: 1px solid #aaa" class="" v-for="(_e, __index) in testCase.expect" :key="__index">
-                      <div class="item-api-info">
-                        <label>Code:</label>
-                        <div class="">
-                          <input type="text" disabled v-model="_e.code">
+                    <div class="block" >
+                        <div style="display: flex;">
+                            <div style="flex: 1;font-size: 16px;font-weight: bold;margin: 16px 0;">
+                                Expects
+                            </div>
                         </div>
-                      </div>
-                      <div class="item-api-info">
-                        <label>Response:</label>
-                        <div class="">
-                          <input type="text" disabled v-model="_e.response">
+                        <div>
+                            <div class="table-headers">
+                                <div class="table-col">
+                                    Code
+                                </div>
+                                <div class="table-col">
+                                    Response
+                                </div>
+                                <div class="table-col">
+                                    Condition
+                                </div>
+                            </div>
+                            <div class="table-content">
+                                <div class="table-row" v-for="(e, _index) in t.expect" :key="_index">
+                                    <div class="table-col">
+                                        <input disabled type="text" v-model="e.code">
+                                    </div>
+                                    <div class="table-col">
+                                        <input disabled type="text" v-model="e.response">
+                                    </div>
+                                    <div class="table-col">
+                                        <input disabled type="text" v-model="e.condition">
+                                    </div>
+                                  </div>
+                            </div>
                         </div>
-                      </div>
-                      <div class="item-api-info">
-                        <label>Condition:</label>
-                        <div class="">
-                          <input type="text" disabled v-model="_e.condition">
-                        </div>
-                      </div>
                     </div>
-                  </div>
-              </div>
+                </div>
             </div>
           </div>
         </div>
@@ -175,9 +243,18 @@
 </template>
 
 <script>
+import Vue from 'vue'
 
 export default {
   name: "Main",
+  data() {
+    return {
+      toggleApiObj: {},
+      togglePObj: {},
+      toggleRObj: {},
+      toggleTObj: {}
+    }
+  },
   props: {
     currentProject: {
       type: Object
@@ -202,9 +279,27 @@ export default {
     },
   },
   methods: {
-    toggle(obj) {
-      console.log(obj)
-      obj.toggle = !obj.toggle
+    toggle(type, id) {
+      if(type == 'api') {
+        let tmpObj = Object.assign({}, this.toggleApiObj)
+        tmpObj[id] = !tmpObj[id]
+        this.toggleApiObj = tmpObj
+      }
+      if(type == 'param') {
+        let tmpObj = Object.assign({}, this.togglePObj)
+        tmpObj[id] = !tmpObj[id]
+        this.togglePObj = tmpObj
+      }
+      if(type == 'res') {
+        let tmpObj = Object.assign({}, this.toggleRObj)
+        tmpObj[id] = !tmpObj[id]
+        this.toggleRObj = tmpObj
+      }
+      if(type == 'test_case') {
+        let tmpObj = Object.assign({}, this.toggleTObj)
+        tmpObj[id] = !tmpObj[id]
+        this.toggleTObj = tmpObj
+      }
     }
   }
 }
@@ -213,6 +308,7 @@ export default {
 <style scoped>
 .item-api {
   position: relative;
+  border-bottom: 1px solid;
 }
 .api-name {
   font-size: 25px;
@@ -303,5 +399,53 @@ export default {
 }
 .hidden {
   display: none;
+}
+
+
+/* =================== */ 
+.table-row {
+    display: flex;
+    /* flex: 1; */
+    align-items: center;
+    justify-content: space-around;
+}
+.table-headers {
+    display: flex;
+    font-weight: bold;
+    justify-content: space-around;
+    text-align: center;
+}
+.table-col {
+    /* flex-basis: 20%; */
+    padding: 0 16px;
+    margin-bottom: 8px;
+    width: 100%;
+}
+.table-add {
+    background: #9e9ea7;
+    border-radius: 10px;
+    padding-top: 8px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.block {
+    margin-bottom: 32px;
+    border-bottom: 1.5px solid rgb(0 0 0 / 35%);
+}
+.table-remove {
+    text-align: center;
+    flex-basis: 50%;
+    cursor: pointer;
+}
+
+
+.dialog-item {
+  display: flex;
+  align-items: center;
+  margin: 10px 0  ;
+}
+.dialog-item label {
+  width: 85px;
+  font-weight: bold!important;
 }
 </style>

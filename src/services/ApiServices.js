@@ -60,7 +60,7 @@ class ApiService {
     deleteTestCase(data) {
         return this.httpPost("/api/test/delete", data)
     }
-    static getInstance(baseUrl) {
+    static getInstance(baseUrl = "") {
         if(!this.instance) {
             this.instance = new ApiService(baseUrl)
         }
@@ -68,5 +68,5 @@ class ApiService {
     }
 }
 
-let apiService = ApiService.getInstance("http://localhost:3003")
+let apiService = ApiService.getInstance()
 export default apiService
