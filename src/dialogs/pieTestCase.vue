@@ -6,12 +6,22 @@
         <div class="dialog-inline">
             <div class="dialog-main">
                 <div style="display: flex;">
-                    <div style="width: 200px!important;margin: auto;" class="submit" @click="onAddCase">Add case</div>
+                    <div class="dialog-item" style="flex: 1">
+                        <label>Test</label>
+                        <div>
+                            <input type="text" v-model="testCase.name">
+                        </div>
+                    </div>
+                    <div class="dialog-item" style="width: auto">
+                        <div style="width: 200px!important;margin: auto;" class="submit" @click="onAddCase">
+                            Add case
+                        </div>
+                    </div>
                 </div>
                 <div v-for="(t, index) in testCase.data" :key="index">
                     <div class="block" style="display: flex;">
                         <div class="dialog-item" style="flex: 1">
-                            <label>Name Case</label>
+                            <label>Case</label>
                             <div>
                                 <input type="text" v-model="t.name">
                             </div>
@@ -58,7 +68,7 @@
                                         <input type="text" v-model="p.name">
                                     </div>
                                     <div class="table-col">
-                                        <input type="text" v-model="p.description">
+                                        <input type="text" v-model="p.value">
                                     </div>
                                     <div class="table-col table-remove" @click="onDeleteP(t, p)">
                                         X
@@ -72,7 +82,7 @@
                             <div style="flex: 1;font-size: 16px;font-weight: bold;margin: 16px 0;">
                                 Expects
                             </div>
-                            <div class="submit" style="width: 200px!important" @click="onAddParam(t)">Add</div>
+                            <div class="submit" style="width: 200px!important" @click="onAddExpect(t)">Add</div>
                         </div>
                         <div>
                             <div class="table-headers">

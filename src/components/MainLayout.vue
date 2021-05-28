@@ -158,10 +158,16 @@
                 </div>
             </div>
             <div class="" v-show="toggleTObj[api.id]" v-for="testCase in api.Tests" :key="testCase.id">
+               <div class="dialog-item" style="flex: 1">
+                  <label>Test</label>
+                  <div>
+                      <input type="text" v-model="testCase.name">
+                  </div>
+                </div>
               <div v-for="(t, index) in testCase.data" :key="index">
                     <div class="block" style="display: flex;">
                         <div class="dialog-item" style="flex: 1">
-                            <label>Name Case</label>
+                            <label>Case</label>
                             <div>
                                 <input type="text" v-model="t.name">
                             </div>
