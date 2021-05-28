@@ -248,8 +248,8 @@ function makeApiMD(api) {
     return str
 }
 
-function makeReadmeMD() {
-    return "This is my document"
+function makeReadmeMD(projectObj) {
+    return projectObj.description || "This is my document"
 }
 async function makeFolder(projectObj) {
     let projectName = projectObj.name
