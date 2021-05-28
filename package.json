@@ -22,8 +22,7 @@
     "mysql2": "^2.2.5",
     "sequelize": "^6.6.2",
     "vue": "^2.6.12",
-    "vuejs-dialog": "^1.4.2",
-    "wi-css": "git+https://github.com/revotechUET/wi-css.git"
+    "vuejs-dialog": "^1.4.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.5.13",
