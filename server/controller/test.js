@@ -20,8 +20,7 @@ async function createTest(req, res, next) {
     //     return res.send(getResponse(200, "Create Test case success!", test))
     // }
     // return res.send(getResponse(400, "Test case has been existed!"))
-    let test = await Test.create({name, data})
-    api.addTest(test)
+    let test = await Test.create({name, data})    api.addTest(test)
     return res.send(getResponse(200, "Create Test case success!", test))
 }
 
